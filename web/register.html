@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="author" content="微普科技 http://www.wiipu.com" />
+		<title> 登陆 - 管理系统</title>
+		<link rel="stylesheet" href="css/basic.css" type="text/css" />
+		<link rel="stylesheet" href="css/form.css" type="text/css" />
+		<link rel="stylesheet" href="css/mycontent.css" type="text/css" />
+		<link rel="stylesheet" href="css/query.css" type="text/css" />
+		<script type="text/javascript" src="js/jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" src="js/layer/layer.js"></script>
+		<script type="text/javascript" src="js/common.js"></script>
+		<script type="text/javascript">
+   $(function(){
+	   $('#reg_form').keydown(function(e){
+			 var e = e || event,
+			 keycode = e.which || e.keyCode;
+			 
+			 if (keycode == 13) {
+			 	$("#btn_reg").trigger("click");
+			 	
+			 }
+	   });
+	   $('#btn_reg').click(function(){
+		   //alert("asdsadsa"); 
+			var ac            = $('input[name="account"]').val();
+			var pwd1        = $('input[name="pwd1"]').val();
+			var pwd2        = $('input[name="pwd2"]').val();
+		   
+/*   			$("input[name='password[]']").each(function(e){
+				 alert($(this).val());
+				 });
+ */ 
+		
+/*  		if($('.remember').prop('checked')){
+				remember = 1;
+			}
+ */			//alert(ac+pwd);
+			if(ac == ''){
+				$('input[name="account"]').focus();
+				return false;
+			}
+			if(pwd1 == ''){
+				$('input[name="password1"]').focus();
+				return false;
+			}
+			if(pwd2 == ''){
+				$('input[name="password2"]').focus();
+				return false;
+			}
+			if(pwd1 != pwd2){//密码不符
+				$('input[name="password2"]').focus();
+				return false;
+			}
+	        
+			//提交
+			$.ajax({
+				type        : 'POST',
+				data        : {
+						account  : ac,
+						password : pwd1
+				},
+                dataType :    'json',
+				url :         'register_do.php',
+				success :     function(data){
+                                    code = data.code;
+									msg  = data.msg;
+									switch(code){
+									case 1:
+										location.href = 'index.php';
+										break;
+									default:
+										layer.alert(msg, {icon: 5});
+								}
+							  }
+			});
+
+	   });
+   });
+		</script>
+	
+	</head>
+	<body id="bg">
+	<div id="login_header">
+		<div class="navbar-container">
+			<span class="logo"><a href="#" title="微普科技"><img src="images/logo.jpg" height="40" /></a></span>
+			<span><a href="#">&gt; 返回到官网</a></span>
+		</div>
+	</div>
+	<div id="reg_container">
+		<div class="reg_top">网站管理系统</div>
+		<div class="reg_content">
+			<form action="register_do.php" id="regform" method="post">
+				<p class="text">账号</p>
+				<p><input type="text" name="account" class="input-text" ></p>
+				<p class="text">密码</p>
+				<p><input type="password" name="pwd1" class="input-text" ></p>
+				<p class="text">确认密码</p>
+				<p><input type="password" name="pwd2" class="input-text" ></p>
+
+				<p class="submit-line">
+					<div class="pull-right">
+						<input type="button" id="btn_reg" class="btn_submit" value="注册" />
+					</div>
+					<div class="clear"></div>
+				</p>
+			</form>
+		</div>
+	</div>
+
+	<div id="footer">
+		<a href="http://www.wiipu.com" target="_blank">北京微普科创科技有限公司</a> 版权所有
+	</div>
+	</body>
+</html>
